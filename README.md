@@ -13,6 +13,9 @@
 
 fetch is Fast Extragalactic Transient Candidate Hunter. It has been detailed in the paper [FETCH: A deep-learning based classifier for fast transient classification](https://arxiv.org/abs/1902.06343).
 
+
+### Work in progress so expect stuff not upto date
+
 Install
 ---
 
@@ -40,7 +43,7 @@ Now we can install `fetch` like this:
     cd fetch
     python setup.py install
 
-The installation will put `predict.py`,`candmaker.py` and `train.py` in your `PYTHONPATH`.
+The installation will put `predict.py`,`candmaker.py` and `train.py` in your `PYTHONPATH`. It also compiles the cython code for incoherent de-dispersion and FDMT algoritm (Zackay & Barak 2014).
 
 Usage
 ---
