@@ -1,0 +1,8 @@
+numpy
+pandas
+tqdm
+scikit-image
+matplotlib
+h5py
+cython
+git+https://github.com/FRBs/sigpyproc3
