@@ -5,13 +5,15 @@ import os
 import string
 import argparse
 
-from fetch.utils import get_model
+from fetch.utils import preget_weights
 
 logger = logging.getLogger(__name__)
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Fast Extragalactic Transient Candiate Hunter (FETCH)",formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('-v', '--verbose', help='Be verbose', action='store_true')
     parser.add_argument('-m', '--model', help='Index of the model to train', required=True)
+    args = parser.parse_args ()
 
     logging_format = '%(asctime)s - %(funcName)s -%(name)s - %(levelname)s - %(message)s'
 
