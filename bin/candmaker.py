@@ -111,8 +111,7 @@ def worker (packed):
         ret['snr']   = SIGMA
         ret['width'] = WIDTH
         ret['cand_id']    = f'cand_tstart_{tstart:.12f}_tcand_{TIME:.7f}_dm_{DM:.5f}_snr_{SIGMA:.5f}'
-        # Care: HDF5 only understands this
-        ret['label'] = b'None'
+        ret['label'] = None
 
         btdd = fetch_btdd.BTDD (
                 fch1=fch1, foff=foff, nchans=nchans,

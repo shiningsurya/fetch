@@ -79,7 +79,11 @@ def save_cand_h5(payload, out_dir=None, fnout=None, fil_header={}):
 
     with h5py.File(fnout, 'w') as f:
         for k in ['tcand','dm','snr','width','cand_id', 'label']:
-            f.attrs[k] = payload[k]
+            fp = payload[k]
+            if fp is not None:
+                f.attrs[k] = fp
+            else:
+                f.attrs[k] = b'None'
 
         # Copy over filterbank header information as attributes
         for k,v in fil_header.items():

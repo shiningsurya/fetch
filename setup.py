@@ -7,7 +7,7 @@ setup(
     name='fetch',
     version='0.1.8',
     packages=['fetch'],
-    scripts=['bin/predict.py', 'bin/train.py', 'bin/candmaker.py'],
+    scripts=['bin/predict.py', 'bin/train.py', 'bin/candmaker.py', 'bin/fetch_h5plot.py'],
     package_dir={'fetch':'fetch'},
     package_data={'fetch':['models/model_list.csv', 'models/*/*yaml']},
     ext_modules=cythonize([
@@ -15,7 +15,7 @@ setup(
         "fetch/fdmt.pyx",
         ]),
     include_dirs=[np.get_include()],
-    url='https://github.com/devanshkv/fetch',
+    url='https://github.com/shiningsurya/fetch',
     license='GNU General Public License v3.0',
     author=['Devansh Agarwal', 'Kshitij Aggarwal', 'Suryarao Bethapudi'],
     author_email=['devansh.kv@gmail.com', 'ka0064@mix.wvu.edu', 'shining.surya.d8@gmail.com'],
