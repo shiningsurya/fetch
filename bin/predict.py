@@ -69,4 +69,4 @@ if __name__ == "__main__":
     results_dict['probability'] = probs[:,1]
     results_dict['label'] = np.round(probs[:, 1] >= args.probability)
     results_file = args.data_dir + f'/results_{args.model}.csv'
-    pd.DataFrame(results_dict).to_csv(results_file)
+    pd.DataFrame(results_dict).to_csv(results_file, index=False)
