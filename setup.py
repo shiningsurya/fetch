@@ -7,7 +7,7 @@ setup(
     name='fetch',
     version='0.1.8',
     packages=['fetch'],
-    scripts=['bin/predict.py', 'bin/train.py', 'bin/candmaker.py', 'bin/fetch_h5plot.py'],
+    scripts=['bin/predict.py', 'bin/train.py', 'bin/candmaker.py', 'bin/fetch_h5plot.py', 'bin/get_all_weights.py'],
     package_dir={'fetch':'fetch'},
     package_data={'fetch':['models/model_list.csv', 'models/*/*yaml']},
     ext_modules=cythonize([

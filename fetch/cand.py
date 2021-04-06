@@ -18,6 +18,8 @@ HEIMDALL_DT_FORMATS = {
 }
 PRESTO_SPS_COLS = ['dm', 'sigma', 'time', 'index', 'width_units']
 
+FIL_HDR_KEYS = ['source_name', 'telescope_id', 'fch1', 'foff','nchans', 'nbits', 'tstart', 'tsamp', 'hdrlen', 'filelen', 'nbytes', 'nsamples', 'filename', 'bandwidth', 'ftop', 'fcenter', 'fbottom', 'tobs', 'ra', 'dec', 'obs_date', 'obs_time']
+
 def masker (df, dmlow=None, dmhigh=None, snlow=None, snhigh=None, wdlow=None, wdhigh=None):
     """Applies mask"""
     mask = df.time >= 0.0       # all true mask
@@ -86,9 +88,13 @@ def save_cand_h5(payload, out_dir=None, fnout=None, fil_header={}):
                 f.attrs[k] = b'None'
 
         # Copy over filterbank header information as attributes
-        for k,v in fil_header.items():
-            if v is not None:
-                f.attrs[k]   = v
+        for k in FIL_HDR_KEYS:
+            if k in fil_header.keys():
+                v = fil_header[k]
+                if v is not None:
+                    f.attrs[k]   = v
+                else:
+                    f.attrs[k]   = b'None'
             else:
                 f.attrs[k]   = b'None'
 

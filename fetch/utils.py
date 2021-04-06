@@ -70,6 +70,27 @@ def ready_for_train(model, nf, ndt, nft):
 
     return model_trainable
 
+def preget_weights (model_idx):
+    """
+    Pre-fetches model weights
+
+    :param model_idx: model string between a--j
+    :type model_idx: str
+    :return: None
+    """
+    # Get the model from the folder
+    logging.info(f'Getting weights of model {model_idx}')
+    path = os.path.split(__file__)[0]
+    model_yaml = glob.glob(f'{path}/models/{model_idx}_FT*/*yaml')[0]
+
+    # get the model weights, if not present download them.
+    model_list = pd.read_csv(f'{path}/models/model_list.csv')
+    model_index = string.ascii_lowercase.index(model_idx)
+
+    weights = get_file(model_list['model'][model_index], PATH_TO_WEIGHTS + model_list['model'][model_index],
+                       file_hash=model_list['hash'][model_index], cache_subdir='models', hash_algorithm='md5')
+
+    return None
 
 def get_model(model_idx):
     """
