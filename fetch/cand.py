@@ -78,7 +78,7 @@ def save_cand_h5(payload, out_dir=None, fnout=None, fil_header={}):
         fnout = os.path.join (out_dir, fnout)
 
     with h5py.File(fnout, 'w') as f:
-        for k in ['tcand','dm','snr','width','cand_id']:
+        for k in ['tcand','dm','snr','width','cand_id', 'label']:
             f.attrs[k] = payload[k]
 
         # Copy over filterbank header information as attributes
