@@ -1,11 +1,9 @@
 
 """
 
-Should I cython?
+Do not use this module anymore.
 
-FETCH seems to this:
-    - For a candidate at DM, FETCH.bowtie plane goes from 0 to 2*DM with ndm steps
-    - the time resolution in the bowtie and the de-dispersed filterbank is half-the-width
+Perfer using `btdd_m` module as that provides the capability to break the dm-axis.
 """
 
 import numpy as np
