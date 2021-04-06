@@ -25,7 +25,8 @@ import sigpyproc as spp
 
 ## fetch imports
 from fetch import cand as fetch_cands
-from fetch import btdd as fetch_btdd
+# from fetch import btdd as fetch_btdd
+from fetch import btdd_m as fetch_btdd
 
 ## kind of sucks that `scikit-image` is a dependency only because of this `block_reduce`
 from skimage.measure import block_reduce
@@ -110,12 +111,13 @@ def worker (packed):
         ret['snr']   = SIGMA
         ret['width'] = WIDTH
         ret['cand_id']    = f'cand_tstart_{tstart:.12f}_tcand_{TIME:.7f}_dm_{DM:.5f}_snr_{SIGMA:.5f}'
+        # Care: HDF5 only understands this
+        ret['label'] = b'None'
 
         btdd = fetch_btdd.BTDD (
-                fch1=fch1, 
-                foff=foff, nchans=nchans,
+                fch1=fch1, foff=foff, nchans=nchans,
                 tsamp=tsamp * wfac, 
-                nsamps=TSIZE, ndm=DSIZE
+                ndm=DSIZE
         )
 
         btdd (DM)
@@ -132,7 +134,7 @@ def worker (packed):
         ==> thankfully, since we are taking care with start_slice, we just blindly take 256 samples and it will match up.
         """
         pre_take     = wfac * TSIZE // 2
-        post_take    = wfac * ( 1.5 * btdd.bt_delays[-1] + WIDTH + TSIZE//2 )
+        post_take    = wfac * ( btdd.max_d + WIDTH + TSIZE//2 )
 
         start_sample = int ((TIME / tsamp) - pre_take)
         width_sample = int (pre_take + post_take)
@@ -151,15 +153,14 @@ def worker (packed):
 
         bt,dd      = btdd.work (fb)
 
-        # fig = plt.figure ()
-        # plt.imshow (bt, aspect='auto', cmap='jet', origin='lower')
-        # plt.show ()
-        # print (f" shapes.1 fb={fb.shape} bt={bt.shape} dd={dd.shape}")
-        # adsfasdf
-
         ## normalize
         bt = normalize (bt)
         dd = normalize (dd)
+
+        # fig = plt.figure ()
+        # plt.imshow (bt, aspect='auto', cmap='jet', origin='lower')
+        # plt.show ()
+        # adsfasdf
 
         ## crop
         ## XXX We no longer use center_crop because we slice carefully
