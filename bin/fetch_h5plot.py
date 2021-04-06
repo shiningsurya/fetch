@@ -25,25 +25,6 @@ import matplotlib.gridspec as mgs
 
 from candmaker import normalize
 
-def plot_h5(h5_file, show=False, save=True, detrend=True):
-    """
-    Plot the h5 candidate file
-    :param h5_file: Address of the candidate h5 file
-    :param show: Argument to display the plot
-    :param save: Argument to save the plot
-    :param detrend: Optional argument to detrend the frequency-time array
-    :return:
-        with h5py.File(h5_file, 'r') as f:
-            dm_time = np.array(f['data_dm_time'])
-            if detrend:
-                freq_time = s.detrend(np.array(f['data_freq_time'])[:, ::-1].T)
-            else:
-                freq_time = np.array(f['data_freq_time'])[:, ::-1].T
-            dm_time[dm_time != dm_time] = 0
-            freq_time[freq_time != freq_time] = 0
-    """
-    pass
-
 def plotter (hf, usemedian=True):
     """actual worker
 
@@ -76,7 +57,7 @@ def plotter (hf, usemedian=True):
     else:
         ts = np.linspace(-128,128,256) * tsamp* 1000
     ### plotting
-    axpp.step (ts, dd.mean (1), where='mid', c='k', ls='-')
+    axpp.step (ts, dd.mean (1), where='mid', c='k', linestyle='-')
     axdd.imshow(dd.T, aspect='auto', extent=[ts[0], ts[-1], fch1, fch1 + (nchan * foff)], interpolation='none',cmap='jet')
     axbt.imshow(bt, aspect='auto', extent=[ts[0], ts[-1], 0, 2*dm], interpolation='none', origin='lower', cmap='jet')
     axtt.text(0.2, 0, str_print, fontsize=14, ha='left', va='bottom', wrap=True)
@@ -97,10 +78,6 @@ if __name__ == '__main__':
     parser.add_argument('-v', '--verbose', help='Be verbose', action='store_true')
 
     parser.add_argument('h5', help='HDF5 candidates.', nargs='+',)
-
-    # parser.add_argument('-c', '--cand_file', help='candidate file. It can be either HEIMDALL or PRESTO candidates.', type=str, required=True)
-    # parser.add_argument('-f', '--fil_file', help='filterbank file. ', type=str, required=True)
-    # parser.add_argument('-k', '--kill_file', help='Numpy readable kill file. ', type=str, default=None)
 
     parser.add_argument('-O', '--odir', help='Output file directory for plots', type=str, default='./')
     values = parser.parse_args()
