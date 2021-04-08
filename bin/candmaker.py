@@ -273,7 +273,7 @@ if __name__ == '__main__':
     ####################################
     ### kill mask logic
     if values.kill_file is not None:
-        MASK = np.loadtxt (values.kill_file)
+        MASK = np.loadtxt (values.kill_file, dtype=np.uint32)
 
     ####################################
     ### run
