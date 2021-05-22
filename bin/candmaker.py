@@ -182,7 +182,7 @@ def worker (packed):
 
     return None
 
-def decimated_read (fil, start, width, tfac, ffac=1, gulp=1024, mask=None):
+def decimated_read (fil, start, width, tfac, ffac=1, gulp=2048, mask=None):
     """
     Reads filterbank and decimates in chunks to reduce IO/memory burden
 
@@ -204,12 +204,14 @@ def decimated_read (fil, start, width, tfac, ffac=1, gulp=1024, mask=None):
     """
     nchans_in    = fil.header['nchans']
     nchans_ou    = nchans_in // ffac 
-    nsamps_ou    = ( width // tfac ) + 1
+    nsamps_ou    = ( width // tfac )
     # print (f" width={width} tfac={tfac} ou={nsamps_ou}")
+    #print (f" Decimated read called start={start} width={width} tfac={tfac} osamps={nsamps_ou}")
 
     ofb          = np.zeros ((nchans_ou, nsamps_ou), dtype=np.float32)
 
     A,B          = 0,0
+    take         = 0
     rp           = fil.readPlan (gulp, start=start, nsamps=width, verbose=False,)
     for iread, _, payload in rp:
         gfb      = payload.reshape ((-1, nchans_in)).T
@@ -217,9 +219,10 @@ def decimated_read (fil, start, width, tfac, ffac=1, gulp=1024, mask=None):
             gfb[MASK] = 0
 
         hfb      = block_reduce (gfb, (ffac, tfac), func=np.mean, cval=np.median(gfb))
-        B        = A + hfb.shape[1]
-        # print (f" decimated_read shapes in={gfb.shape} io={hfb.shape} A={A} B={B} ofb={ofb.shape} tfac={tfac} ffac={ffac}")
-        ofb[:,A:B] = hfb
+        take     = int (gfb.shape[1] / tfac)
+        B        = A + take
+        #print (f" decimated_read shapes in={gfb.shape} io={hfb.shape} A={A} B={B} ofb={ofb.shape} tfac={tfac} ffac={ffac}")
+        ofb[:,A:B] = hfb[:,:take]
         A        = B
 
     return ofb
@@ -242,8 +245,8 @@ if __name__ == '__main__':
     parser.add_argument('--dmlow', help='Minimum DM', type=float, default=0.0)
     parser.add_argument('--dmhigh', help='Maximum DM', type=float, default=2000.0)
 
-    parser.add_argument('--wdlow', help='Minimum boxcar width in log2 (int)', type=int, default=1)
-    parser.add_argument('--wdhigh', help='Maximum boxcar width in log2 (int)', type=int, default=16)
+    parser.add_argument('--wdlow', help='Minimum boxcar width in log2 (int)', type=int, default=None)
+    parser.add_argument('--wdhigh', help='Maximum boxcar width in log2 (int)', type=int, default=None)
 
 
     parser.add_argument('-o', '--fout', help='Output file directory for candidate h5', type=str)
